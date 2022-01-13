@@ -15,13 +15,12 @@ void *A (void *t) {
   //printf("A: Comecei: thread %d\n", *my_id);
   pthread_mutex_lock(&mutex);
   //printf("O valor de x é %d\n", x);
-  if( x != 4 ){
+  while(x != 4){
     pthread_cond_wait(&cond, &mutex);
   }
-  printf("Volte sempre!\n");
-  //printf("somou mais um x = %d\n",x);
-  pthread_mutex_unlock(&mutex);
+  printf("Volte sempre\n");
   pthread_cond_signal(&cond);
+  pthread_mutex_unlock(&mutex);
   free(my_id); 
   pthread_exit(NULL);
 }
@@ -31,14 +30,15 @@ void *B (void *t) {
   //printf("B: Comecei: thread %d\n", *my_id);
   pthread_mutex_lock(&mutex);
   //printf("O valor de x é %d\n", x);
-  if( x == 0 ){
+  while( x == 0 ) {
     pthread_cond_wait(&cond, &mutex);
+    //printf("desbloqueou\n");
   }
   printf("Fique a vontade\n");
   x++;
   //printf("somou mais um x = %d\n",x);
-  pthread_mutex_unlock(&mutex);
   pthread_cond_signal(&cond);
+  pthread_mutex_unlock(&mutex);
   free(my_id);
   pthread_exit(NULL);
 }
@@ -48,14 +48,15 @@ void *C (void *t) {
   //printf("C: Comecei: thread %d\n", *my_id);
   pthread_mutex_lock(&mutex);
   //printf("O valor de x é %d\n", x);
-  if( x == 0 ){
+  while(x == 0){
     pthread_cond_wait(&cond, &mutex);
+    //printf("desbloqueou\n");
   }
   printf("Sente-se por favor\n");
   x++;
   //printf("somou mais um x = %d\n",x);
-  pthread_mutex_unlock(&mutex);
   pthread_cond_signal(&cond);
+  pthread_mutex_unlock(&mutex);
   free(my_id);
   pthread_exit(NULL);
 }
@@ -65,14 +66,15 @@ void *D (void *t) {
   //printf("D: Comecei: thread %d\n", *my_id);
   pthread_mutex_lock(&mutex);
   //printf("O valor de x é %d\n", x);
-  if( x == 0 ){
+  while(x == 0){
     pthread_cond_wait(&cond, &mutex);
+   // printf("desbloqueou\n");
   }
   printf("Aceita um copo d'água\n");
   x++;
   //printf("somou mais um x = %d\n",x);
-  pthread_mutex_unlock(&mutex);
   pthread_cond_signal(&cond);
+  pthread_mutex_unlock(&mutex);
   free(my_id);
   pthread_exit(NULL);
 }
@@ -82,14 +84,13 @@ void *E (void *t) {
   //printf("E: Comecei: thread %d\n", *my_id);
   pthread_mutex_lock(&mutex);
   //printf("O valor de x é %d\n", x);
-  if( x != 0 ){
-    pthread_cond_wait(&cond, &mutex);
+  if(x == 0){
+    printf("Seja bem-vindo!\n");
+    x++;
   }
-  printf("Seja bem-vindo!\n");
-  x++;
   //printf("somou mais um x = %d\n",x);
+  pthread_cond_broadcast(&cond);
   pthread_mutex_unlock(&mutex);
-  pthread_cond_signal(&cond);
   free(my_id);
   pthread_exit(NULL);
 }
